@@ -1,8 +1,5 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { SectionTitle } from "@/components/shared/section-title";
-import { testimonials } from "@/data/testimonials";
+import { getPublicTestimonials } from "@/lib/public-testimonials";
 
 const palette = [
   { bg: "#E8F0ED", dot: "#013220" },
@@ -10,7 +7,10 @@ const palette = [
   { bg: "#E8F0ED", dot: "#013220" },
 ];
 
-export function TestimonialsSection() {
+export async function TestimonialsSection() {
+  const testimonials = await getPublicTestimonials();
+  if (testimonials.length === 0) return null;
+
   return (
     <section className="py-20 md:py-28" style={{ background: "#FDFBF7" }}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
@@ -21,12 +21,8 @@ export function TestimonialsSection() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {testimonials.slice(0, 3).map((t, i) => (
-            <motion.div
-              key={t.name}
-              initial={{ opacity: 0, y: 14 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.08, duration: 0.42 }}
+            <div
+              key={t.id}
               className="flex flex-col bg-white rounded-2xl p-7 border border-[#E5E1D8] hover:shadow-[0_8px_32px_rgba(1,50,32,0.07)] transition-shadow duration-300"
             >
               {/* Quote mark */}
@@ -67,7 +63,7 @@ export function TestimonialsSection() {
                   <p className="text-[0.72rem] text-[#9CA3AF]">{t.course}</p>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

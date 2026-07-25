@@ -8,6 +8,7 @@ export const PERMISSIONS = {
   MANAGE_ADMISSION_SESSIONS: "manage_admission_sessions",
   MANAGE_MASTERS: "manage_masters",
   MANAGE_LEADS: "manage_leads",
+  MANAGE_TESTIMONIALS: "manage_testimonials",
   MANAGE_SETTINGS: "manage_settings",
   MANAGE_FORMS: "manage_forms",
   VIEW_REPORTS: "view_reports",

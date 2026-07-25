@@ -484,6 +484,26 @@ enum LeadStatus {
   closed
 }
 
+enum TestimonialStatus {
+  active
+  inactive
+}
+
+/** Student reviews shown in the "Student Stories" section on the homepage. Managed by Super Admin. */
+model Testimonial {
+  id        BigInt            @id @default(autoincrement())
+  name      String            @db.VarChar(150)
+  course    String            @db.VarChar(150)
+  review    String            @db.Text
+  rating    Int               @default(5)
+  status    TestimonialStatus @default(active)
+  sortOrder Int               @default(0) @map("sort_order")
+  createdAt DateTime          @default(now()) @map("created_at")
+  updatedAt DateTime          @updatedAt @map("updated_at")
+
+  @@map("testimonials")
+}
+
 /** Submissions from the public "Send an Enquiry" form. Reviewed by the Super Admin under Leads. */
 model Lead {
   id               BigInt     @id @default(autoincrement())

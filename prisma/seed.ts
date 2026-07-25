@@ -56,7 +56,7 @@ async function seedRolesAndPermissions() {
     PERMISSIONS.UPLOAD_DOCUMENTS,
     PERMISSIONS.SUBMIT_ADMISSION,
     PERMISSIONS.PRINT_ADMISSION_FORM,
-    // manage_leads intentionally excluded — enquiry leads are Super Admin only.
+    // manage_leads / manage_testimonials intentionally excluded — Super Admin only.
   ];
   const adminPerms = allPermissions.filter((p) => adminPermissionKeys.includes(p.key));
   for (const perm of adminPerms) {
@@ -314,11 +314,28 @@ async function seedCourses(
   await upsertCourseList(ODL_COURSES, categories["ODL"].id);
 }
 
+async function seedTestimonials() {
+  const existing = await prisma.testimonial.count();
+  if (existing > 0) return; // don't overwrite content the Super Admin may have edited
+
+  const initialTestimonials = [
+    { name: "Priya Sharma", course: "B.Ed", rating: 5, sortOrder: 1, review: "Chahar Institute made my B.Ed admission process incredibly smooth. Their counselors guided me at every step, from document verification to university selection." },
+    { name: "Rahul Verma", course: "MBA (Distance)", rating: 5, sortOrder: 2, review: "I was able to complete my MBA while working full-time. The team at Chahar Institute helped me choose the right university and handle all paperwork." },
+    { name: "Anita Kumari", course: "D.El.Ed", rating: 4, sortOrder: 3, review: "As a first-generation learner, I had many doubts about distance education. Chahar Institute answered all my questions patiently and helped me get admitted." },
+    { name: "Vikash Singh", course: "BCA", rating: 5, sortOrder: 4, review: "The fees were very affordable and the admission process was transparent. I got all my documents processed within a week. Highly recommended!" },
+    { name: "Neha Gupta", course: "M.Ed", rating: 5, sortOrder: 5, review: "I wanted to pursue M.Ed for career growth but was confused about universities. Chahar Institute provided expert guidance and I got admitted to a top university." },
+    { name: "Amit Kumar", course: "BA (Distance)", rating: 4, sortOrder: 6, review: "Completed my BA through distance mode while working. Chahar Institute made it possible with their efficient admission support and follow-up." },
+  ];
+
+  await prisma.testimonial.createMany({ data: initialTestimonials });
+}
+
 async function main() {
   const { superAdminRole } = await seedRolesAndPermissions();
   await seedInitialSuperAdmin(superAdminRole.id);
   const { categories, faculties } = await seedMasters();
   await seedCourses(categories, faculties);
+  await seedTestimonials();
   console.log("Seed complete.");
 }
 

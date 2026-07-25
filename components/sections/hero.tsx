@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
 
 const stats = [
@@ -14,21 +13,26 @@ const stats = [
 export function HeroSection() {
   return (
     <section
-      className="overflow-hidden"
-      style={{ background: "#FDFBF7", minHeight: "90vh" }}
+      className="relative overflow-hidden"
+      style={{
+        backgroundImage: "url(/heroBG.png)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        minHeight: "90vh",
+      }}
     >
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 h-full">
+      <div className="relative max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 h-full">
         <div
-          className="grid lg:grid-cols-[1fr_480px] gap-0 items-end"
+          className="flex items-center"
           style={{ minHeight: "90vh" }}
         >
 
-          {/* ── LEFT ─────────────────────────────────────── */}
           <motion.div
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="flex flex-col justify-center py-16 lg:py-24 pt-[88px] pr-0 lg:pr-12"
+            className="flex flex-col justify-center py-16 lg:py-24 pt-[88px] max-w-2xl"
           >
             {/* Eyebrow */}
             <div className="flex items-center gap-2.5 mb-6">
@@ -48,10 +52,10 @@ export function HeroSection() {
             >
               Your Trusted Partner
               <br />
-              for Distance{" "}
+              for Regular{" "}
               <span style={{ color: "#C5A059" }}>&amp;</span>
               <br />
-              Online Education
+              Distance Education
             </h1>
 
             {/* Sub */}
@@ -96,30 +100,6 @@ export function HeroSection() {
                   </span>
                 </div>
               ))}
-            </div>
-          </motion.div>
-
-          {/* ── RIGHT — image ─────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.65, delay: 0.1, ease: "easeOut" }}
-            className="hidden lg:flex relative self-stretch items-end"
-          >
-            {/* Backing shape — starts lower, ends before full height */}
-           
-            {/* Image — capped height, sits on backing */}
-            <div className="relative w-full flex items-end justify-center z-10">
-              <Image
-                src="/ci.png"
-                alt="Students at Chahar Institute"
-                width={460}
-                height={420}
-                className="object-contain object-bottom w-full"
-                style={{ maxHeight: "72vh" }}
-                priority
-                unoptimized
-              />
             </div>
           </motion.div>
 

@@ -11,6 +11,7 @@ import {
   UserCircle,
   Plus,
   Megaphone,
+  Star,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -31,6 +32,7 @@ const BASE_LINKS: NavItem[] = [
 /** Reference-data management — Super Admin only. */
 const MANAGE_LINKS: NavItem[] = [
   { href: "/admin/leads", label: "Leads", icon: Megaphone },
+  { href: "/admin/testimonials", label: "Testimonials", icon: Star },
   { href: "/admin/courses", label: "Course Names", icon: GraduationCap },
   { href: "/admin/masters", label: "Masters", icon: Database, linkTo: "/admin/masters/sessions" },
   { href: "/admin/users", label: "Admin Users", icon: Users },

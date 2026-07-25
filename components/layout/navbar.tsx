@@ -8,9 +8,9 @@ import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/co
 const navLinks = [
   { href: "/",             label: "Home"          },
   { href: "/courses",      label: "Courses"       },
-  { href: "/universities", label: "Universities"  },
+  // { href: "/universities", label: "Universities"  }, // commented out per request — Partner Universities hidden from header
   { href: "/about",        label: "About"         },
-  { href: "/blog",         label: "Blog"          },
+  // { href: "/blog",         label: "Blog"          }, // commented out per request — Blog hidden from header for now
   { href: "/contact",      label: "Contact"       },
 ];
 
@@ -46,13 +46,27 @@ export function Navbar() {
         <div className="flex items-center justify-between" style={{ height: "80px" }}>
 
           {/* ── Logo ── */}
-          <Link href="/" className="flex items-center flex-shrink-0">
+          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/logo.png"
+              src="/logoWTB.png"
               alt="Chahar Institute"
               style={{ height: "72px", width: "auto", objectFit: "contain", display: "block" }}
             />
+            <span className="flex flex-col leading-tight">
+              <span
+                className="font-bold"
+                style={{ fontSize: "1.05rem", color: "#2d2d2d", letterSpacing: "-0.01em" }}
+              >
+                Chahar
+              </span>
+              <span
+                className="font-bold"
+                style={{ fontSize: "1.05rem", color: "#C5A059", letterSpacing: "-0.01em" }}
+              >
+                Institute
+              </span>
+            </span>
           </Link>
 
           {/* ── Desktop Nav ── */}
@@ -125,7 +139,7 @@ export function Navbar() {
                   <SheetTitle>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src="/logo.png"
+                      src="/logoWTB.png"
                       alt="Chahar Institute"
                       style={{ height: "48px", width: "auto", objectFit: "contain" }}
                     />

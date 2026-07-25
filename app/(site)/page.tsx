@@ -16,7 +16,7 @@ export default function Home() {
       <WhyChooseUs />
       <CoursesSection />
       <AdmissionProcess />
-      <UniversitiesSection />
+      {/* <UniversitiesSection /> */}
       <TestimonialsSection />
       <FAQSection />
       <ContactCTA />

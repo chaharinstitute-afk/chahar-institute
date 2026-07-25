@@ -5,7 +5,7 @@ const quickLinks = [
   { href: "/courses",      label: "Courses"       },
   { href: "/universities", label: "Universities"  },
   { href: "/about",        label: "About Us"      },
-  { href: "/blog",         label: "Blog"          },
+  // { href: "/blog",         label: "Blog"          }, // commented out per request — Blog hidden for now
   { href: "/contact",      label: "Contact"       },
 ];
 
@@ -38,7 +38,7 @@ export async function Footer() {
             {/* Logo — white filter so it shows on dark bg */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/logo.png"
+              src="/logoWTB.png"
               alt="Chahar Institute"
               style={{
                 height: "52px", width: "auto",
@@ -156,11 +156,12 @@ export async function Footer() {
         <div style={{ height: "1px", background: "rgba(255,255,255,0.07)", marginBottom: "20px" }} />
 
         {/* ── Bottom bar ── */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.78rem" }}>
             © {new Date().getFullYear()} Chahar Institute. All rights reserved.
           </p>
-          <div className="flex items-center gap-5">
+
+          <div className="flex flex-wrap items-center justify-center gap-5">
             <Link
               href="/privacy-policy"
               className="hover:text-white transition-colors"
@@ -175,6 +176,34 @@ export async function Footer() {
             >
               Terms
             </Link>
+
+            {/* Developer credit — small badge with a subtle gold glow on hover */}
+            <a
+              href="https://arundevstudio.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 transition-all duration-300"
+              style={{
+                border: "1px solid rgba(197,160,89,0.25)",
+                background: "rgba(197,160,89,0.06)",
+              }}
+            >
+              <span
+                className="text-[0.7rem] transition-transform duration-500 group-hover:rotate-180"
+                style={{ color: "#C5A059" }}
+              >
+                ✦
+              </span>
+              <span style={{ color: "rgba(255,255,255,0.45)", fontSize: "0.76rem" }}>
+                Crafted by{" "}
+                <span
+                  className="font-semibold transition-colors"
+                  style={{ color: "#C5A059" }}
+                >
+                  Arun Dev Studio
+                </span>
+              </span>
+            </a>
           </div>
         </div>
 
