@@ -1,0 +1,210 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+  --color-ring:                 var(--ring);
+  --color-input:                var(--input);
+  --color-border:               var(--border);
+  --color-destructive:          var(--destructive);
+  --color-accent-foreground:    var(--accent-foreground);
+  --color-accent:               var(--accent);
+  --color-muted-foreground:     var(--muted-foreground);
+  --color-muted:                var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary:            var(--secondary);
+  --color-primary-foreground:   var(--primary-foreground);
+  --color-primary:              var(--primary);
+  --color-popover-foreground:   var(--popover-foreground);
+  --color-popover:              var(--popover);
+  --color-card-foreground:      var(--card-foreground);
+  --color-card:                 var(--card);
+  --radius-sm:  calc(var(--radius) * 0.5);
+  --radius-md:  calc(var(--radius) * 0.75);
+  --radius-lg:  var(--radius);
+  --radius-xl:  calc(var(--radius) * 1.5);
+  --radius-2xl: calc(var(--radius) * 2);
+}
+
+:root {
+  /* Brand */
+  --green:       #013220;
+  --green-dark:  #011a12;
+  --green-mid:   #024a30;
+  --gold:        #C5A059;
+  --gold-light:  #e8c97a;
+  --gold-pale:   #F5EFE0;
+  --cream:       #FDFBF7;
+  --cream-dark:  #F3F0EA;
+
+  /* Tailwind design tokens */
+  --background:           #FDFBF7;
+  --foreground:           #1A1A1A;
+  --card:                 #FFFFFF;
+  --card-foreground:      #1A1A1A;
+  --popover:              #FFFFFF;
+  --popover-foreground:   #1A1A1A;
+  --primary:              #013220;
+  --primary-foreground:   #FFFFFF;
+  --secondary:            #C5A059;
+  --secondary-foreground: #1A1A1A;
+  --muted:                #F0EDE7;
+  --muted-foreground:     #6B7280;
+  --accent:               #C5A059;
+  --accent-foreground:    #FFFFFF;
+  --destructive:          #ef4444;
+  --border:               #E5E1D8;
+  --input:                #E5E1D8;
+  --ring:                 #013220;
+  --radius:               0.75rem;
+}
+
+/* ─── Base ──────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #FDFBF7;
+    color: #1A1A1A;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.18;
+    font-weight: 700;
+  }
+
+  p, span, a, li, label, button, input, textarea, select {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  ::selection {
+    background: #C5A059;
+    color: #fff;
+  }
+}
+
+/* ─── Pill Button ───────────────────────────────────────── */
+@layer components {
+
+  /* ── Light variant (default) */
+  .btn-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    background: #ffffff;
+    border: 1.5px solid #E0DDD6;
+    border-radius: 9999px;
+    padding: 4px 4px 4px 18px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.82rem;
+    color: #1A1A1A;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.18s;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    line-height: 1;
+    user-select: none;
+  }
+  .btn-pill:hover {
+    border-color: #C5A059;
+    box-shadow: 0 4px 18px rgba(1,50,32,0.10);
+    transform: translateY(-1px);
+  }
+  .btn-pill-label {
+    flex: 1;
+    padding-right: 12px;
+  }
+  .btn-pill-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 9999px;
+    background: #C5A059;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.85rem;
+    line-height: 1;
+    color: #fff;
+    font-weight: 700;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn-pill:hover .btn-pill-circle {
+    background: #013220;
+    transform: scale(1.07) rotate(10deg);
+  }
+
+  /* ── Dark variant — now uses same WHITE pill, just bolder label */
+  .btn-pill-dark {
+    background: #ffffff;
+    border-color: #1A1A1A;
+    color: #1A1A1A;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  .btn-pill-dark:hover {
+    border-color: #C5A059;
+    box-shadow: 0 4px 18px rgba(1,50,32,0.12);
+  }
+  .btn-pill-dark .btn-pill-circle {
+    background: #C5A059;
+    color: #ffffff;
+    font-weight: 700;
+  }
+  .btn-pill-dark:hover .btn-pill-circle {
+    background: #013220;
+    transform: scale(1.07) rotate(10deg);
+  }
+
+  /* ── Small variant */
+  .btn-pill-sm {
+    padding: 3px 3px 3px 13px;
+    font-size: 0.75rem;
+  }
+  .btn-pill-sm .btn-pill-circle {
+    width: 24px;
+    height: 24px;
+    font-size: 0.72rem;
+  }
+}
+
+/* ── Admin panel: native <select> chevron ──────────────────────────────
+   Selects in the admin panel use `appearance-none` so their border/height
+   match text inputs exactly. That also removes the browser's dropdown
+   arrow, so we draw one as a background SVG here. */
+.admin-select {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-position: right 0.6rem center;
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+}
+
+/* ── Public site: native <select> chevron ───────────────────────────────
+   Same technique as .admin-select, used by the enquiry form's course
+   dropdown so it matches the site's rounded-input look instead of the
+   browser's default arrow. */
+.site-select {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-position: right 1rem center;
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+}

@@ -1,0 +1,503 @@
+// Chahar Institute — Admission Management System
+// See admin/ADMIN_PANEL_PLAN.md for full design notes.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+// Access control
+// ─────────────────────────────────────────────
+
+model Role {
+  id          BigInt           @id @default(autoincrement())
+  roleName    String           @unique @map("role_name") @db.VarChar(100)
+  permissions RolePermission[]
+  users       User[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id    BigInt           @id @default(autoincrement())
+  key   String           @unique @db.VarChar(100)
+  label String           @db.VarChar(150)
+  roles RolePermission[]
+
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       BigInt @map("role_id")
+  permissionId BigInt @map("permission_id")
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+enum UserStatus {
+  active
+  inactive
+}
+
+model User {
+  id          BigInt     @id @default(autoincrement())
+  roleId      BigInt     @map("role_id")
+  fullName    String     @map("full_name") @db.VarChar(150)
+  email       String     @unique @db.VarChar(150)
+  mobile      String?    @db.VarChar(20)
+  password    String     @db.VarChar(255)
+  status      UserStatus @default(active)
+  lastLoginAt DateTime?  @map("last_login_at")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  role              Role           @relation(fields: [roleId], references: [id])
+  createdStudents   Student[]      @relation("StudentCreatedBy")
+  createdAdmissions Admission[]    @relation("AdmissionCreatedBy")
+  admissionLogs     AdmissionLog[]
+  notifications     Notification[]
+
+  @@map("users")
+}
+
+// ─────────────────────────────────────────────
+// Master / lookup tables
+// ─────────────────────────────────────────────
+
+enum MasterStatus {
+  active
+  inactive
+}
+
+model AdmissionCategory {
+  id           BigInt       @id @default(autoincrement())
+  categoryName String       @unique @map("category_name") @db.VarChar(50)
+  status       MasterStatus @default(active)
+
+  courses    Course[]
+  admissions Admission[]
+
+  @@map("admission_categories")
+}
+
+model CourseType {
+  id     BigInt       @id @default(autoincrement())
+  name   String       @unique @db.VarChar(50)
+  status MasterStatus @default(active)
+
+  courses Course[]
+
+  @@map("course_types")
+}
+
+model AdmissionSession {
+  id          BigInt  @id @default(autoincrement())
+  session     String  @db.VarChar(20)
+  // "Annual" = single yearly intake (used by Regular). "January" / "July" = bi-annual
+  // intake sessions used by Online and ODL categories (e.g. "2026" + "January" intake).
+  sessionType String  @default("Annual") @map("session_type") @db.VarChar(20)
+  isActive    Boolean @default(false) @map("is_active")
+
+  admissions Admission[]
+  sequence   AdmissionNumberSequence?
+
+  @@unique([session, sessionType])
+  @@map("admission_sessions")
+}
+
+model Faculty {
+  id     BigInt       @id @default(autoincrement())
+  name   String       @unique @db.VarChar(100)
+  status MasterStatus @default(active)
+
+  admissions Admission[]
+  courses    Course[]
+  streams    Stream[]
+
+  @@map("faculties")
+}
+
+model Stream {
+  id        BigInt       @id @default(autoincrement())
+  facultyId BigInt?      @map("faculty_id")
+  name      String       @unique @db.VarChar(100)
+  status    MasterStatus @default(active)
+
+  faculty    Faculty?    @relation(fields: [facultyId], references: [id])
+  admissions Admission[]
+
+  @@map("streams")
+}
+
+model Religion {
+  id     BigInt       @id @default(autoincrement())
+  name   String       @unique @db.VarChar(50)
+  status MasterStatus @default(active)
+
+  students Student[]
+
+  @@map("religions")
+}
+
+model CasteCategory {
+  id     BigInt       @id @default(autoincrement())
+  name   String       @unique @db.VarChar(50)
+  status MasterStatus @default(active)
+
+  students Student[]
+
+  @@map("caste_categories")
+}
+
+model Country {
+  id     BigInt       @id @default(autoincrement())
+  name   String       @unique @db.VarChar(100)
+  status MasterStatus @default(active)
+
+  states   State[]
+  students Student[]
+
+  @@map("countries")
+}
+
+model State {
+  id        BigInt       @id @default(autoincrement())
+  countryId BigInt       @map("country_id")
+  name      String       @db.VarChar(100)
+  status    MasterStatus @default(active)
+
+  country   Country    @relation(fields: [countryId], references: [id])
+  districts District[]
+  students  Student[]
+
+  @@unique([countryId, name])
+  @@map("states")
+}
+
+model District {
+  id      BigInt       @id @default(autoincrement())
+  stateId BigInt       @map("state_id")
+  name    String       @db.VarChar(100)
+  status  MasterStatus @default(active)
+
+  state    State     @relation(fields: [stateId], references: [id])
+  students Student[]
+
+  @@unique([stateId, name])
+  @@map("districts")
+}
+
+model DocumentType {
+  id     BigInt       @id @default(autoincrement())
+  name   String       @unique @db.VarChar(100)
+  status MasterStatus @default(active)
+
+  documents StudentDocument[]
+
+  @@map("document_types")
+}
+
+// ─────────────────────────────────────────────
+// Core tables
+// ─────────────────────────────────────────────
+
+model University {
+  id             BigInt       @id @default(autoincrement())
+  universityName String       @map("university_name") @db.VarChar(200)
+  logo           String?      @db.VarChar(255)
+  address        String?      @db.Text
+  website        String?      @db.VarChar(255)
+  status         MasterStatus @default(active)
+
+  courses    Course[]
+  admissions Admission[]
+
+  @@map("universities")
+}
+
+model Course {
+  id                  BigInt       @id @default(autoincrement())
+  universityId        BigInt?      @map("university_id")
+  admissionCategoryId BigInt       @map("admission_category_id")
+  courseTypeId        BigInt?      @map("course_type_id")
+  facultyId           BigInt?      @map("faculty_id")
+  courseName          String       @map("course_name") @db.VarChar(150)
+  eligibility         String?      @db.VarChar(255)
+  duration            String?      @db.VarChar(50)
+  semesters           Int?
+  yearlyFee           Decimal?     @map("yearly_fee") @db.Decimal(10, 2)
+  status              MasterStatus @default(active)
+  // Public website content — shown on the course detail page. All optional so
+  // existing rows keep working; the admin Course Names form lets Super Admin
+  // fill these in per course.
+  description         String?      @db.Text
+  overview            String?      @db.Text
+  // JSON string arrays — kept simple (no separate tables) since these are
+  // small, course-scoped lists edited only from the admin panel.
+  requiredDocuments   Json?        @map("required_documents")
+  careerOpportunities Json?        @map("career_opportunities")
+  faqs                Json?
+
+  university        University?       @relation(fields: [universityId], references: [id])
+  admissionCategory AdmissionCategory @relation(fields: [admissionCategoryId], references: [id])
+  courseType        CourseType?       @relation(fields: [courseTypeId], references: [id])
+  faculty           Faculty?          @relation(fields: [facultyId], references: [id])
+  admissions        Admission[]
+
+  @@map("courses")
+}
+
+enum Gender {
+  male
+  female
+  other
+}
+
+model Student {
+  id               BigInt    @id @default(autoincrement())
+  studentCode      String    @unique @map("student_code") @db.VarChar(30)
+  fullName         String    @map("full_name") @db.VarChar(150)
+  fatherName       String?   @map("father_name") @db.VarChar(150)
+  motherName       String?   @map("mother_name") @db.VarChar(150)
+  dob              DateTime? @db.Date
+  gender           Gender?
+  casteCategoryId  BigInt?   @map("caste_category_id")
+  religionId       BigInt?   @map("religion_id")
+  maritalStatus    String?   @map("marital_status") @db.VarChar(30)
+  employmentStatus String?   @map("employment_status") @db.VarChar(50)
+  aadhaar          String?   @db.VarChar(20)
+  abcId            String?   @map("abc_id") @db.VarChar(30)
+  debId            String?   @map("deb_id") @db.VarChar(30)
+  mobile           String?   @db.VarChar(20)
+  alternateMobile  String?   @map("alternate_mobile") @db.VarChar(20)
+  email            String?   @db.VarChar(150)
+  alternateEmail   String?   @map("alternate_email") @db.VarChar(150)
+  address          String?   @db.Text
+  city             String?   @db.VarChar(100)
+  // Free-text district/state captured directly on the admission form. The
+  // districtId/stateId FKs below stay available for the future India-wide
+  // states/districts master data import (see admin/ADMIN_PANEL_PLAN.md).
+  district         String?   @db.VarChar(100)
+  state            String?   @db.VarChar(100)
+  districtId       BigInt?   @map("district_id")
+  stateId          BigInt?   @map("state_id")
+  countryId        BigInt?   @map("country_id")
+  pincode          String?   @db.VarChar(10)
+  createdBy        BigInt?   @map("created_by")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  casteCategory CasteCategory? @relation(fields: [casteCategoryId], references: [id])
+  religion      Religion?      @relation(fields: [religionId], references: [id])
+  districtRef   District?      @relation(fields: [districtId], references: [id])
+  stateRef      State?         @relation(fields: [stateId], references: [id])
+  country       Country?       @relation(fields: [countryId], references: [id])
+  creator       User?          @relation("StudentCreatedBy", fields: [createdBy], references: [id])
+
+  academicRecords AcademicRecord[]
+  admissions      Admission[]
+  documents       StudentDocument[]
+
+  @@map("students")
+}
+
+enum Qualification {
+  tenth
+  twelfth
+  graduation
+  post_graduation
+}
+
+model AcademicRecord {
+  id              BigInt        @id @default(autoincrement())
+  studentId       BigInt        @map("student_id")
+  qualification   Qualification
+  boardUniversity String?       @map("board_university") @db.VarChar(200)
+  passingYear     Int?          @map("passing_year")
+  percentage      Decimal?      @db.Decimal(5, 2)
+  cgpa            Decimal?      @db.Decimal(4, 2)
+  result          String?       @db.VarChar(30)
+  rollNo          String?       @map("roll_no") @db.VarChar(50)
+  registrationNo  String?       @map("registration_no") @db.VarChar(50)
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@map("academic_records")
+}
+
+enum PaymentStatus {
+  pending
+  paid
+  failed
+}
+
+enum AdmissionStatus {
+  draft
+  submitted
+  under_verification
+  documents_pending
+  approved
+  rejected
+  completed
+}
+
+model Admission {
+  id                  BigInt          @id @default(autoincrement())
+  admissionNo         String          @unique @map("admission_no") @db.VarChar(30)
+  studentId           BigInt          @map("student_id")
+  universityId        BigInt?         @map("university_id")
+  admissionCategoryId BigInt          @map("admission_category_id")
+  courseId            BigInt          @map("course_id")
+  admissionSessionId  BigInt          @map("admission_session_id")
+  admissionType       String?         @map("admission_type") @db.VarChar(50)
+  facultyId           BigInt?         @map("faculty_id")
+  streamId            BigInt?         @map("stream_id")
+  semester            Int?
+  registrationFee     Decimal?        @map("registration_fee") @db.Decimal(10, 2)
+  paymentStatus       PaymentStatus   @default(pending) @map("payment_status")
+  admissionStatus     AdmissionStatus @default(draft) @map("admission_status")
+  remarks             String?         @db.Text
+  createdBy           BigInt?         @map("created_by")
+  createdAt           DateTime        @default(now()) @map("created_at")
+  updatedAt           DateTime        @updatedAt @map("updated_at")
+
+  student           Student           @relation(fields: [studentId], references: [id])
+  university        University?       @relation(fields: [universityId], references: [id])
+  admissionCategory AdmissionCategory @relation(fields: [admissionCategoryId], references: [id])
+  course            Course            @relation(fields: [courseId], references: [id])
+  admissionSession  AdmissionSession  @relation(fields: [admissionSessionId], references: [id])
+  faculty           Faculty?          @relation(fields: [facultyId], references: [id])
+  stream            Stream?           @relation(fields: [streamId], references: [id])
+  creator           User?             @relation("AdmissionCreatedBy", fields: [createdBy], references: [id])
+
+  documents StudentDocument[]
+  payments  Payment[]
+  logs      AdmissionLog[]
+
+  @@map("admissions")
+}
+
+model StudentDocument {
+  id             BigInt   @id @default(autoincrement())
+  studentId      BigInt   @map("student_id")
+  admissionId    BigInt?  @map("admission_id")
+  documentTypeId BigInt   @map("document_type_id")
+  filePath       String   @map("file_path") @db.VarChar(255)
+  verified       Boolean  @default(false)
+  uploadedAt     DateTime @default(now()) @map("uploaded_at")
+
+  student      Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  admission    Admission?   @relation(fields: [admissionId], references: [id])
+  documentType DocumentType @relation(fields: [documentTypeId], references: [id])
+
+  @@map("student_documents")
+}
+
+model Payment {
+  id            BigInt        @id @default(autoincrement())
+  admissionId   BigInt        @map("admission_id")
+  amount        Decimal       @db.Decimal(10, 2)
+  paymentMode   String?       @map("payment_mode") @db.VarChar(50)
+  transactionNo String?       @map("transaction_no") @db.VarChar(100)
+  paymentDate   DateTime?     @map("payment_date")
+  receiptNo     String?       @map("receipt_no") @db.VarChar(50)
+  paymentStatus PaymentStatus @default(pending) @map("payment_status")
+
+  admission Admission @relation(fields: [admissionId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+// ─────────────────────────────────────────────
+// Activity / audit tables
+// ─────────────────────────────────────────────
+
+model AdmissionLog {
+  id          BigInt   @id @default(autoincrement())
+  admissionId BigInt   @map("admission_id")
+  action      String   @db.VarChar(100)
+  oldValue    Json?    @map("old_value")
+  newValue    Json?    @map("new_value")
+  createdBy   BigInt?  @map("created_by")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  admission Admission @relation(fields: [admissionId], references: [id], onDelete: Cascade)
+  creator   User?     @relation(fields: [createdBy], references: [id])
+
+  @@map("admission_logs")
+}
+
+model Notification {
+  id        BigInt   @id @default(autoincrement())
+  userId    BigInt?  @map("user_id")
+  title     String   @db.VarChar(150)
+  message   String   @db.Text
+  type      String?  @db.VarChar(50)
+  isRead    Boolean  @default(false) @map("is_read")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("notifications")
+}
+
+model AdmissionNumberSequence {
+  sessionId  BigInt @id @map("session_id")
+  lastNumber BigInt @default(0) @map("last_number")
+
+  session AdmissionSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("admission_number_sequences")
+}
+
+model StudentCodeSequence {
+  id         BigInt @id @default(1)
+  lastNumber BigInt @default(0) @map("last_number")
+
+  @@map("student_code_sequences")
+}
+
+model Setting {
+  key   String @id @db.VarChar(100)
+  value String @db.Text
+
+  @@map("settings")
+}
+
+// ─────────────────────────────────────────────
+// Public website — enquiry leads
+// ─────────────────────────────────────────────
+
+enum LeadStatus {
+  new
+  contacted
+  converted
+  closed
+}
+
+/** Submissions from the public "Send an Enquiry" form. Reviewed by the Super Admin under Leads. */
+model Lead {
+  id               BigInt     @id @default(autoincrement())
+  fullName         String     @map("full_name") @db.VarChar(150)
+  phone            String     @db.VarChar(20)
+  email            String?    @db.VarChar(150)
+  interestedCourse String?    @map("interested_course") @db.VarChar(150)
+  message          String?    @db.Text
+  // Which page/section the enquiry came from, e.g. "contact", "course:BCA".
+  source           String?    @db.VarChar(100)
+  status           LeadStatus @default(new)
+  remarks          String?    @db.Text
+  createdAt        DateTime   @default(now()) @map("created_at")
+  updatedAt        DateTime   @updatedAt @map("updated_at")
+
+  @@map("leads")
+}
