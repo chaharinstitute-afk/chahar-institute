@@ -19,13 +19,13 @@ export function HeroSection() {
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-        minHeight: "90vh",
+        minHeight: "100vh",
       }}
     >
       <div className="relative max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 h-full">
         <div
           className="flex items-center"
-          style={{ minHeight: "90vh" }}
+          style={{ minHeight: "100vh" }}
         >
 
           <motion.div
