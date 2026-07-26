@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { AlertCircle } from "lucide-react";
@@ -63,11 +64,15 @@ export default function AdminLoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-[#FDFBF7] px-4 py-10">
       <div className="w-full max-w-sm">
         <div className="mb-6 text-center">
-          <span className="inline-flex size-11 items-center justify-center rounded-xl bg-[#013220] text-base font-bold text-[#C5A059]">
-            CI
-          </span>
-          <h1 className="mt-4 text-xl font-bold tracking-tight text-[#1A1A1A]">Chahar Institute</h1>
-          <p className="text-sm text-[#6B7280]">Admission panel sign in</p>
+          <Image
+            src="/logoWTR.png"
+            alt="Chahar Institute"
+            width={260}
+            height={160}
+            className="mx-auto h-24 w-auto object-contain"
+            priority
+          />
+          <p className="mt-3 text-sm text-[#6B7280]">Admission panel sign in</p>
         </div>
 
         <div className="rounded-xl border border-[#E5E1D8] bg-white p-6 shadow-[0_1px_3px_rgba(1,50,32,0.06)]">

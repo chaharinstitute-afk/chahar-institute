@@ -5,6 +5,7 @@ import { CoursesSection } from "@/components/sections/courses-section";
 import { AdmissionProcess } from "@/components/sections/admission-process";
 import { UniversitiesSection } from "@/components/sections/universities-section";
 import { TestimonialsSection } from "@/components/sections/testimonials-section";
+import { BlogSection } from "@/components/sections/blog-section";
 import { FAQSection } from "@/components/sections/faq-section";
 import { ContactCTA } from "@/components/sections/contact-cta";
 
@@ -18,6 +19,7 @@ export default function Home() {
       <AdmissionProcess />
       {/* <UniversitiesSection /> */}
       <TestimonialsSection />
+      <BlogSection />
       <FAQSection />
       <ContactCTA />
     </>

@@ -24,7 +24,7 @@ export function HeroSection() {
     >
       <div className="relative max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 h-full">
         <div
-          className="flex items-center"
+          className="flex items-start"
           style={{ minHeight: "100vh" }}
         >
 
@@ -32,7 +32,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="flex flex-col justify-center py-16 lg:py-24 pt-[88px] max-w-2xl"
+            className="flex flex-col justify-center pt-36 sm:pt-40 lg:pt-44 pb-16 max-w-2xl"
           >
             {/* Eyebrow */}
             <div className="flex items-center gap-2.5 mb-6">
@@ -82,19 +82,24 @@ export function HeroSection() {
             {/* Stats — compact inline row */}
             <div
               className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-5 pt-7"
-              style={{ borderTop: "1px solid #E5E1D8" }}
+              style={{ borderTop: "1px solid rgba(1,50,32,0.18)" }}
             >
               {stats.map((s) => (
                 <div key={s.label} className="flex flex-col gap-0.5">
                   <span
                     className="font-bold tracking-tight"
-                    style={{ fontSize: "1.5rem", color: "#1A1A1A", lineHeight: 1.1 }}
+                    style={{
+                      fontSize: "1.5rem",
+                      color: "#C5A059",
+                      lineHeight: 1.1,
+                      textShadow: "0 1px 6px rgba(255,255,255,0.5)",
+                    }}
                   >
                     {s.number}
                   </span>
                   <span
                     className="text-[0.72rem] font-medium uppercase tracking-[0.1em]"
-                    style={{ color: "#9CA3AF" }}
+                    style={{ color: "#013220", textShadow: "0 1px 4px rgba(255,255,255,0.5)" }}
                   >
                     {s.label}
                   </span>

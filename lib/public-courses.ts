@@ -94,6 +94,19 @@ export async function getPublicCourseBySlug(slug: string): Promise<PublicCourse 
 }
 
 /**
+ * Finds the live course that best matches a blog post's `relatedCourse` hint
+ * (a plain-text fragment like "BCA" or "B.Ed"). Case-insensitive substring
+ * match against courseName, preferring an exact match if one exists.
+ */
+export async function findRelatedCourse(hint: string): Promise<PublicCourse | null> {
+  const all = await getPublicCourses();
+  const needle = hint.trim().toLowerCase();
+  const exact = all.find((c) => c.courseName.toLowerCase() === needle);
+  if (exact) return exact;
+  return all.find((c) => c.courseName.toLowerCase().includes(needle)) ?? null;
+}
+
+/**
  * Display label for a course — plain course name, no category tag. The
  * enquiry form's dropdown and course cards just list the name; the delivery
  * mode (Regular/Online) is shown separately via section headings, not baked

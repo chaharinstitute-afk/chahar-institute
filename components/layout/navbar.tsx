@@ -10,7 +10,7 @@ const navLinks = [
   { href: "/courses",      label: "Courses"       },
   // { href: "/universities", label: "Universities"  }, // commented out per request — Partner Universities hidden from header
   { href: "/about",        label: "About"         },
-  // { href: "/blog",         label: "Blog"          }, // commented out per request — Blog hidden from header for now
+  { href: "/blog",         label: "Blog"          },
   { href: "/contact",      label: "Contact"       },
 ];
 

@@ -29,6 +29,11 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
   },
+  icons: {
+    icon: "/logoWTB.png",
+    shortcut: "/logoWTB.png",
+    apple: "/logoWTB.png",
+  },
   robots: { index: true, follow: true },
 };
 

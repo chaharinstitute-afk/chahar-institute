@@ -5,7 +5,7 @@ const quickLinks = [
   { href: "/courses",      label: "Courses"       },
   { href: "/universities", label: "Universities"  },
   { href: "/about",        label: "About Us"      },
-  // { href: "/blog",         label: "Blog"          }, // commented out per request — Blog hidden for now
+  { href: "/blog",         label: "Blog"          },
   { href: "/contact",      label: "Contact"       },
 ];
 
