@@ -58,14 +58,14 @@ export async function Footer() {
                 className="flex items-center gap-2 text-[0.82rem] font-semibold hover:text-white transition-colors"
                 style={{ color: "#C5A059" }}
               >
-                <span>📞</span> +91 90506 23550
+                <span>📞</span> +91 99172 81887
               </a>
               <a
-                href="mailto:info@chaharinstitute.com"
+                href="mailto:chaharinstitute@gmail.com"
                 className="flex items-center gap-2 text-[0.82rem] hover:text-white transition-colors"
                 style={{ color: "rgba(255,255,255,0.55)" }}
               >
-                <span>✉</span> info@chaharinstitute.com
+                <span>✉</span> chaharinstitute@gmail.com
               </a>
             </div>
           </div>
@@ -139,7 +139,7 @@ export async function Footer() {
               </div>
               <div>
                 <p className="font-semibold text-white text-[0.82rem]">Address</p>
-                <p>Jind, Haryana, India</p>
+                <p>Agra, Uttar Pradesh, India</p>
               </div>
               <div
                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[0.72rem] font-semibold"

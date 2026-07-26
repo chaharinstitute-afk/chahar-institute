@@ -1,9 +1,10 @@
 import { MetadataRoute } from "next";
 import { getPublicCourses } from "@/lib/public-courses";
 import { blogs } from "@/data/blogs";
+import { SITE_URL } from "@/lib/seo";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://chaharinstitute.com";
+  const baseUrl = SITE_URL;
   const courses = await getPublicCourses();
 
   const staticPages = [

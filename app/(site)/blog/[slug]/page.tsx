@@ -7,6 +7,7 @@ import { CheckCircle2, Clock, User } from "lucide-react";
 import { PillButton } from "@/components/shared/pill-button";
 import { findRelatedCourse } from "@/lib/public-courses";
 import { resolveBlogImage } from "@/lib/blog-images";
+import { blogPostingJsonLd } from "@/lib/seo";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -20,7 +21,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const blog = blogs.find((b) => b.slug === slug);
   if (!blog) return { title: "Blog Not Found" };
-  return { title: blog.title, description: blog.excerpt };
+  return {
+    title: blog.title,
+    description: blog.excerpt,
+    alternates: { canonical: `/blog/${blog.slug}` },
+    openGraph: {
+      title: blog.title,
+      description: blog.excerpt,
+      url: `/blog/${blog.slug}`,
+      type: "article",
+      publishedTime: blog.date,
+      authors: [blog.author],
+    },
+  };
 }
 
 export default async function BlogDetailPage({ params }: Props) {
@@ -35,6 +48,11 @@ export default async function BlogDetailPage({ params }: Props) {
 
   return (
     <div>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd({ ...blog, image: heroImage })) }}
+      />
       {/* ── Banner ── */}
       <section className="bg-[#013220] py-16 sm:py-20 text-white">
         <div className="max-w-3xl mx-auto px-5">

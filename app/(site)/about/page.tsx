@@ -7,6 +7,12 @@ import { PageBanner } from "@/components/shared/page-banner";
 export const metadata: Metadata = {
   title: "About Us",
   description: "Learn about Chahar Institute — 10+ years of experience in distance education with 5000+ students enrolled.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About Chahar Institute",
+    description: "10+ years of experience in distance education with 5000+ students enrolled.",
+    url: "/about",
+  },
 };
 
 export default function AboutPage() {

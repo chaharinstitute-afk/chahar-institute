@@ -6,6 +6,12 @@ import { getPublicCourses, categoryAccent } from "@/lib/public-courses";
 export const metadata: Metadata = {
   title: "Courses",
   description: "Explore regular and distance courses including B.Ed, MBA, BCA, MCA, BA, MA and more through recognized universities.",
+  alternates: { canonical: "/courses" },
+  openGraph: {
+    title: "Courses — Chahar Institute",
+    description: "Explore regular and distance courses including B.Ed, MBA, BCA, MCA, BA, MA and more.",
+    url: "/courses",
+  },
 };
 
 const cardBgs = [

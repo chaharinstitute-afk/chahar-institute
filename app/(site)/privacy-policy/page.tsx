@@ -35,7 +35,7 @@ export default function PrivacyPolicyPage() {
 
           <div>
             <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">Your Rights</h2>
-            <p className="text-[#6B7280] leading-relaxed">You have the right to access, correct, or delete your personal information. Contact us at info@chaharinstitute.com.</p>
+            <p className="text-[#6B7280] leading-relaxed">You have the right to access, correct, or delete your personal information. Contact us at chaharinstitute@gmail.com.</p>
           </div>
         </div>
       </section>

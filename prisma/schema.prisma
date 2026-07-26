@@ -516,6 +516,11 @@ model Lead {
   source           String?    @db.VarChar(100)
   status           LeadStatus @default(new)
   remarks          String?    @db.Text
+  // Super Admin can schedule a callback/follow-up for a lead (e.g. "call again
+  // in 10 days"), with a note on why. Once followUpDate reaches today or
+  // earlier, the lead is highlighted in the admin Leads list as due.
+  followUpDate     DateTime?  @map("follow_up_date") @db.Date
+  followUpNote     String?    @map("follow_up_note") @db.Text
   createdAt        DateTime   @default(now()) @map("created_at")
   updatedAt        DateTime   @updatedAt @map("updated_at")
 

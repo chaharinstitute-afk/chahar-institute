@@ -4,6 +4,12 @@ import { ContactCTA } from "@/components/sections/contact-cta";
 export const metadata: Metadata = {
   title: "Contact Us",
   description: "Get in touch with Chahar Institute for admission enquiries. Call, WhatsApp, or fill our contact form.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Contact Chahar Institute",
+    description: "Get in touch for admission enquiries — call, WhatsApp, or fill our contact form.",
+    url: "/contact",
+  },
 };
 
 export default function ContactPage() {
@@ -29,7 +35,7 @@ export default function ContactPage() {
             <div className="text-center text-[#6B7280]">
               <p className="text-4xl mb-2">ðŸ“</p>
               <p className="font-medium text-[#1A1A1A]">Our Location</p>
-              <p className="text-sm">Near Bus Stand, Main Market, Jind, Haryana</p>
+              <p className="text-sm">Agra, Uttar Pradesh</p>
             </div>
           </div>
         </div>

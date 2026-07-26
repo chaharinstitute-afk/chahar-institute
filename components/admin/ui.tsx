@@ -135,8 +135,12 @@ export function Td({ children, className }: { children?: ReactNode; className?: 
   return <td className={cn("px-4 py-3 align-middle text-[#374151]", className)}>{children}</td>;
 }
 
-export function Tr({ children }: { children: ReactNode }) {
-  return <tr className="border-b border-[#F0EDE7] last:border-0 hover:bg-[#FDFBF7]/70 transition-colors">{children}</tr>;
+export function Tr({ children, className }: { children: ReactNode; className?: string }) {
+  return (
+    <tr className={cn("border-b border-[#F0EDE7] last:border-0 hover:bg-[#FDFBF7]/70 transition-colors", className)}>
+      {children}
+    </tr>
+  );
 }
 
 /** Full-width row shown when a table has no data or is loading. */

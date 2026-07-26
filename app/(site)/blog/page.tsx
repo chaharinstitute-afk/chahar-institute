@@ -8,6 +8,12 @@ import { resolveBlogImage } from "@/lib/blog-images";
 export const metadata: Metadata = {
   title: "Blog",
   description: "Read latest articles about distance education, career guidance, and admission tips from Chahar Institute.",
+  alternates: { canonical: "/blog" },
+  openGraph: {
+    title: "Blog — Chahar Institute",
+    description: "Admission tips, career guidance, and course comparisons.",
+    url: "/blog",
+  },
 };
 
 export default async function BlogPage() {

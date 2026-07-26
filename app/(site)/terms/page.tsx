@@ -40,7 +40,7 @@ export default function TermsPage() {
 
           <div>
             <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">Contact</h2>
-            <p className="text-[#6B7280] leading-relaxed">For questions regarding these terms, contact us at info@chaharinstitute.com.</p>
+            <p className="text-[#6B7280] leading-relaxed">For questions regarding these terms, contact us at chaharinstitute@gmail.com.</p>
           </div>
         </div>
       </section>

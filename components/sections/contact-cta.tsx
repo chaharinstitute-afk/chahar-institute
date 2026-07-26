@@ -5,9 +5,9 @@ import { Phone, Mail, MapPin, Clock, CheckCircle2, Compass, GraduationCap, FileC
 import { ContactForm } from "@/components/shared/contact-form";
 
 const contactDetails = [
-  { icon: Phone, label: "Phone", value: "+91 90506 23550" },
-  { icon: Mail, label: "Email", value: "info@chaharinstitute.com" },
-  { icon: MapPin, label: "Address", value: "Jind, Haryana, India" },
+  { icon: Phone, label: "Phone", value: "+91 99172 81887" },
+  { icon: Mail, label: "Email", value: "chaharinstitute@gmail.com" },
+  { icon: MapPin, label: "Address", value: "Agra, Uttar Pradesh, India" },
   { icon: Clock, label: "Office Hours", value: "Mon – Sat, 9 AM – 6 PM" },
 ];
 

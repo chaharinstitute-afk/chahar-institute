@@ -32,7 +32,12 @@ export async function PATCH(
   const { id } = await params;
   const body = await req.json();
 
-  const data: { status?: LeadStatus; remarks?: string | null } = {};
+  const data: {
+    status?: LeadStatus;
+    remarks?: string | null;
+    followUpDate?: Date | null;
+    followUpNote?: string | null;
+  } = {};
   if (typeof body.status === "string") {
     if (!VALID_STATUSES.includes(body.status as LeadStatus)) {
       return NextResponse.json({ error: "Invalid status" }, { status: 400 });
@@ -41,6 +46,24 @@ export async function PATCH(
   }
   if (typeof body.remarks === "string") {
     data.remarks = body.remarks.trim() || null;
+  }
+  // followUpDate: string (YYYY-MM-DD) to set, null to clear, undefined to leave unchanged.
+  if (body.followUpDate !== undefined) {
+    if (body.followUpDate === null || body.followUpDate === "") {
+      data.followUpDate = null;
+      data.followUpNote = null;
+    } else {
+      const parsed = new Date(body.followUpDate);
+      if (Number.isNaN(parsed.getTime())) {
+        return NextResponse.json({ error: "Invalid follow-up date" }, { status: 400 });
+      }
+      data.followUpDate = parsed;
+      if (typeof body.followUpNote === "string") {
+        data.followUpNote = body.followUpNote.trim() || null;
+      }
+    }
+  } else if (typeof body.followUpNote === "string") {
+    data.followUpNote = body.followUpNote.trim() || null;
   }
 
   try {
@@ -55,6 +78,8 @@ export async function PATCH(
       source: updated.source,
       status: updated.status,
       remarks: updated.remarks,
+      followUpDate: updated.followUpDate,
+      followUpNote: updated.followUpNote,
       createdAt: updated.createdAt,
     });
   } catch (err) {

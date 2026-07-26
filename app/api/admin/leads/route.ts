@@ -35,6 +35,8 @@ export async function GET() {
       source: l.source,
       status: l.status,
       remarks: l.remarks,
+      followUpDate: l.followUpDate,
+      followUpNote: l.followUpNote,
       createdAt: l.createdAt,
     }))
   );

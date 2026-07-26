@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { HeroSection } from "@/components/sections/hero";
 import { AboutSection } from "@/components/sections/about-section";
 import { WhyChooseUs } from "@/components/sections/why-choose-us";
@@ -8,6 +9,18 @@ import { TestimonialsSection } from "@/components/sections/testimonials-section"
 import { BlogSection } from "@/components/sections/blog-section";
 import { FAQSection } from "@/components/sections/faq-section";
 import { ContactCTA } from "@/components/sections/contact-cta";
+
+export const metadata: Metadata = {
+  title: "Chahar Institute — Online & Distance Education Partner",
+  description:
+    "Chahar Institute offers expert guidance for admissions to B.Ed, D.El.Ed, MBA, BCA, MCA and other courses through UGC-recognised universities. Based in Agra, Uttar Pradesh.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: "Chahar Institute — Online & Distance Education Partner",
+    description: "Your trusted partner for quality education admissions in India.",
+    url: "/",
+  },
+};
 
 export default function Home() {
   return (
