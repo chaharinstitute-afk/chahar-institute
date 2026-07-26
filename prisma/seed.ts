@@ -290,7 +290,7 @@ async function seedCourses(
         eligibility: c.eligibility,
         duration: c.duration,
         semesters: c.semesters ?? null,
-        yearlyFee: c.yearlyFee,
+        universityFee: c.yearlyFee,
         courseTypeId: inferCourseType(c.name),
         facultyId: faculties[c.faculty]?.id ?? null,
       };

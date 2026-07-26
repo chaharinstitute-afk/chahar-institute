@@ -234,7 +234,10 @@ model Course {
   eligibility         String?      @db.VarChar(255)
   duration            String?      @db.VarChar(50)
   semesters           Int?
-  yearlyFee           Decimal?     @map("yearly_fee") @db.Decimal(10, 2)
+  // Renamed from "yearlyFee" — the fee charged by the university for the course.
+  universityFee       Decimal?     @map("university_fee") @db.Decimal(10, 2)
+  // What Chahar Institute charges on top of the university fee for handling the admission.
+  totalAdminFee       Decimal?     @map("total_admin_fee") @db.Decimal(10, 2)
   status              MasterStatus @default(active)
   // Public website content — shown on the course detail page. All optional so
   // existing rows keep working; the admin Course Names form lets Super Admin

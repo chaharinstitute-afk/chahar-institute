@@ -27,13 +27,14 @@ type NavItem = {
 const BASE_LINKS: NavItem[] = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/admissions", label: "Admissions", icon: FileText },
+  // View-only for a plain Admin (no add/edit/delete); full manage access for Super Admin.
+  { href: "/admin/courses", label: "Course Names", icon: GraduationCap },
 ];
 
 /** Reference-data management — Super Admin only. */
 const MANAGE_LINKS: NavItem[] = [
   { href: "/admin/leads", label: "Leads", icon: Megaphone },
   { href: "/admin/testimonials", label: "Testimonials", icon: Star },
-  { href: "/admin/courses", label: "Course Names", icon: GraduationCap },
   { href: "/admin/masters", label: "Masters", icon: Database, linkTo: "/admin/masters/sessions" },
   { href: "/admin/users", label: "Admin Users", icon: Users },
 ];

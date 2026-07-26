@@ -32,7 +32,8 @@ export async function PATCH(
   if (body.eligibility !== undefined) data.eligibility = body.eligibility || null;
   if (body.duration !== undefined) data.duration = body.duration || null;
   if (body.semesters !== undefined) data.semesters = body.semesters ? Number(body.semesters) : null;
-  if (body.yearlyFee !== undefined) data.yearlyFee = body.yearlyFee ? String(body.yearlyFee) : null;
+  if (body.universityFee !== undefined) data.universityFee = body.universityFee ? String(body.universityFee) : null;
+  if (body.totalAdminFee !== undefined) data.totalAdminFee = body.totalAdminFee ? String(body.totalAdminFee) : null;
   if (body.status === "active" || body.status === "inactive") data.status = body.status;
   if (body.description !== undefined) data.description = body.description || null;
   if (body.overview !== undefined) data.overview = body.overview || null;
@@ -53,7 +54,8 @@ export async function PATCH(
     eligibility: updated.eligibility,
     duration: updated.duration,
     semesters: updated.semesters,
-    yearlyFee: updated.yearlyFee ? updated.yearlyFee.toString() : null,
+    universityFee: updated.universityFee ? updated.universityFee.toString() : null,
+    totalAdminFee: updated.totalAdminFee ? updated.totalAdminFee.toString() : null,
     status: updated.status,
     admissionCategoryId: updated.admissionCategoryId.toString(),
     courseTypeId: updated.courseTypeId?.toString() ?? null,
