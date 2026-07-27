@@ -63,8 +63,9 @@ export function HeroSection() {
               className="mb-10 max-w-[400px]"
               style={{ color: "#6B7280", fontSize: "0.975rem", lineHeight: 1.75 }}
             >
-              Expert counselling and seamless admission support for B.Ed, MBA, BCA
-              and 15+ programs through UGC‑recognised universities.
+              Agra&apos;s trusted UP B.Ed and D.El.Ed college admission partner —
+              expert counselling for B.Ed, MBA, BCA and 15+ distance courses
+              through UGC‑recognised universities.
             </p>
 
             {/* Buttons */}

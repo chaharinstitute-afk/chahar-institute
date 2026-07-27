@@ -50,13 +50,16 @@ export function AboutSection() {
               align="left"
             />
             <p className="text-[#6B7280] text-[0.95rem] leading-relaxed mb-5">
-              We provide end-to-end admission support for students enrolling in
-              UGC‑recognised universities across India — from course selection
-              and document verification to final confirmation.
+              Based in Agra, Uttar Pradesh, Chahar Institute provides end-to-end
+              admission support for students enrolling in UGC‑recognised
+              universities across India — from course selection and document
+              verification to final confirmation.
             </p>
             <p className="text-[#6B7280] text-[0.95rem] leading-relaxed">
-              Our experienced counsellors have helped over 5,000 students
-              navigate distance and online education with confidence and clarity.
+              As a leading UP B.Ed college and D.El.Ed college admission partner,
+              our experienced counsellors have helped over 5,000 students across
+              Agra and Uttar Pradesh navigate distance courses and online
+              education with confidence and clarity.
             </p>
           </motion.div>
 

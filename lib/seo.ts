@@ -15,12 +15,16 @@ export function organizationJsonLd() {
     url: SITE_URL,
     logo: `${SITE_URL}/logoWTB.png`,
     description:
-      "Chahar Institute offers expert guidance for admissions to B.Ed, D.El.Ed, MBA, BCA, MCA and other courses through UGC-recognised universities.",
+      "Chahar Institute is a UP B.Ed college and D.El.Ed college admission partner in Agra, offering expert guidance for B.Ed, D.El.Ed, MBA, BCA, MCA and other distance courses through UGC-recognised universities.",
     address: {
       "@type": "PostalAddress",
       addressLocality: "Agra",
       addressRegion: "Uttar Pradesh",
       addressCountry: "IN",
+    },
+    areaServed: {
+      "@type": "State",
+      name: "Uttar Pradesh",
     },
     contactPoint: {
       "@type": "ContactPoint",
