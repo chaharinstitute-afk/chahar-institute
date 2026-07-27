@@ -14,10 +14,15 @@ import {
   Send,
   Trash2,
   Upload,
+  Wallet,
 } from "lucide-react";
 import { ConfirmDialog } from "@/components/admin/confirm-dialog";
 import { ReviewPanel } from "@/components/admin/review-panel";
+import { PaymentPopup } from "@/components/admin/payment-popup";
+import { PaymentReviewPanel } from "@/components/admin/payment-review-panel";
 import {
+  Badge,
+  BadgeTone,
   Card,
   FormSection,
   StatusBadge,
@@ -62,6 +67,36 @@ type AdmissionDetail = {
   admissionSession: { session: string; sessionType: string };
   academicRecords: AcademicRecord[];
   documents: DocumentRow[];
+  totalFee: string | null;
+  receivedAmount: string | null;
+  dueAmount: string | null;
+  nextPaymentDueDate: string | null;
+  currentPaymentStatus: "pending_verification" | "partially_paid" | "paid" | "rejected" | null;
+};
+
+type PaymentSubmissionRow = {
+  id: string;
+  amountPaid: string | null;
+  utrNumber: string | null;
+  screenshotPath: string;
+  status: "pending_verification" | "approved" | "rejected";
+  submittedBy: { fullName: string };
+  submittedAt: string;
+  verifiedBy: { fullName: string } | null;
+  verifiedAt: string | null;
+  remarks: string | null;
+  admission: {
+    totalFee: string | null;
+    receivedAmount: string | null;
+    dueAmount: string | null;
+  };
+};
+
+const PAYMENT_STATUS_TONE: Record<string, BadgeTone> = {
+  pending_verification: "warn",
+  partially_paid: "info",
+  paid: "success",
+  rejected: "danger",
 };
 
 type DocumentType = { id: string; name: string };
@@ -79,6 +114,8 @@ export default function AdmissionDetailPage() {
 
   const [admission, setAdmission] = useState<AdmissionDetail | null>(null);
   const [documentTypes, setDocumentTypes] = useState<DocumentType[]>([]);
+  const [payments, setPayments] = useState<PaymentSubmissionRow[]>([]);
+  const [payPopupOpen, setPayPopupOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [uploadingTypeId, setUploadingTypeId] = useState<string | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<Record<string, File | null>>({});
@@ -93,12 +130,14 @@ export default function AdmissionDetailPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const [admissionRes, typesRes] = await Promise.all([
+    const [admissionRes, typesRes, paymentsRes] = await Promise.all([
       apiFetch(`/api/admin/admissions/${admissionId}`),
       apiFetch("/api/admin/masters/document-types"),
+      apiFetch(`/api/admin/admissions/${admissionId}/payments`),
     ]);
     if (admissionRes?.ok) setAdmission(await admissionRes.json());
     if (typesRes?.ok) setDocumentTypes(await typesRes.json());
+    if (paymentsRes?.ok) setPayments(await paymentsRes.json());
     setLoading(false);
   }, [admissionId]);
 
@@ -221,6 +260,11 @@ export default function AdmissionDetailPage() {
                 {admission.admissionNo}
               </h1>
               <StatusBadge status={admission.admissionStatus} />
+              {admission.currentPaymentStatus && (
+                <Badge tone={PAYMENT_STATUS_TONE[admission.currentPaymentStatus]}>
+                  {admission.currentPaymentStatus.replace(/_/g, " ")}
+                </Badge>
+              )}
             </div>
             <p className="mt-1 text-sm text-[#6B7280]">
               {admission.student.fullName}{" "}
@@ -237,6 +281,15 @@ export default function AdmissionDetailPage() {
               <Printer className="size-4" />
               Print Form
             </Link>
+
+            <button
+              type="button"
+              onClick={() => setPayPopupOpen(true)}
+              className="inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg border border-[#E5E1D8] bg-white px-3.5 text-sm font-medium text-[#374151] transition-colors hover:bg-[#F3F4F6] sm:flex-none"
+            >
+              <Wallet className="size-4" />
+              Pay
+            </button>
 
             {admission.admissionStatus === "draft" && (
               <button
@@ -298,6 +351,44 @@ export default function AdmissionDetailPage() {
                 </span>
               </dd>
             </div>
+            {(admission.totalFee || admission.receivedAmount || admission.dueAmount) && (
+              <>
+                <div>
+                  <dt className="text-[0.68rem] uppercase tracking-[0.08em] text-[#9CA3AF]">
+                    Total Fee
+                  </dt>
+                  <dd className="text-sm font-medium text-[#1A1A1A]">
+                    {admission.totalFee ? `₹${admission.totalFee}` : "—"}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-[0.68rem] uppercase tracking-[0.08em] text-[#9CA3AF]">
+                    Received
+                  </dt>
+                  <dd className="text-sm font-medium text-green-700">
+                    {admission.receivedAmount ? `₹${admission.receivedAmount}` : "—"}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-[0.68rem] uppercase tracking-[0.08em] text-[#9CA3AF]">
+                    Due
+                  </dt>
+                  <dd className="text-sm font-medium text-amber-700">
+                    {admission.dueAmount ? `₹${admission.dueAmount}` : "₹0.00"}
+                  </dd>
+                </div>
+                {admission.nextPaymentDueDate && (
+                  <div>
+                    <dt className="text-[0.68rem] uppercase tracking-[0.08em] text-[#9CA3AF]">
+                      Next Due Date
+                    </dt>
+                    <dd className="text-sm font-medium text-[#1A1A1A]">
+                      {new Date(admission.nextPaymentDueDate).toLocaleDateString("en-IN")}
+                    </dd>
+                  </div>
+                )}
+              </>
+            )}
           </dl>
 
           {admission.remarks && (
@@ -350,6 +441,74 @@ export default function AdmissionDetailPage() {
                   <Td className="text-[#6B7280]">{r.passingYear || "—"}</Td>
                   <Td className="text-[#6B7280]">{r.percentage ? `${r.percentage}%` : "—"}</Td>
                   <Td className="text-[#6B7280]">{r.result || "—"}</Td>
+                </Tr>
+              ))}
+            </tbody>
+          </TableWrap>
+        </div>
+      )}
+
+      {/* Payments */}
+      {payments.length > 0 && (
+        <div className="mb-6">
+          <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.08em] text-[#1A1A1A]">
+            <span className="h-[2px] w-5 rounded-full bg-[#C5A059]" />
+            Payments
+          </h2>
+
+          {admission.canReview &&
+            payments
+              .filter((p) => p.status === "pending_verification")
+              .map((p) => (
+                <PaymentReviewPanel
+                  key={p.id}
+                  submission={p}
+                  onChanged={() => {
+                    setNotice(null);
+                    load();
+                  }}
+                />
+              ))}
+
+          <TableWrap>
+            <thead>
+              <tr>
+                <Th>Submitted</Th>
+                <Th>Amount Paid</Th>
+                <Th>UTR</Th>
+                <Th>Status</Th>
+                <Th>Verified By</Th>
+                <Th />
+              </tr>
+            </thead>
+            <tbody>
+              {payments.map((p) => (
+                <Tr key={p.id}>
+                  <Td className="whitespace-nowrap text-[#6B7280]">
+                    {new Date(p.submittedAt).toLocaleDateString("en-IN")}
+                    <div className="text-xs text-[#9CA3AF]">{p.submittedBy.fullName}</div>
+                  </Td>
+                  <Td className="font-medium text-[#1A1A1A]">
+                    {p.amountPaid ? `₹${p.amountPaid}` : "—"}
+                  </Td>
+                  <Td className="text-[#6B7280]">{p.utrNumber || "—"}</Td>
+                  <Td>
+                    <Badge tone={PAYMENT_STATUS_TONE[p.status] ?? "neutral"}>
+                      {p.status.replace(/_/g, " ")}
+                    </Badge>
+                  </Td>
+                  <Td className="text-[#6B7280]">{p.verifiedBy?.fullName || "—"}</Td>
+                  <Td>
+                    <a
+                      href={`/api/admin/payments/${p.id}/screenshot`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs font-medium text-[#8a6d31] hover:underline"
+                    >
+                      <Eye className="size-3.5" />
+                      View
+                    </a>
+                  </Td>
                 </Tr>
               ))}
             </tbody>
@@ -481,6 +640,17 @@ export default function AdmissionDetailPage() {
         onConfirm={handleConfirmDelete}
         loading={deleting}
         error={deleteError}
+      />
+
+      <PaymentPopup
+        open={payPopupOpen}
+        onOpenChange={setPayPopupOpen}
+        admissionId={admission.id}
+        dueAmount={admission.dueAmount}
+        onSubmitted={() => {
+          setNotice("Payment submitted for verification.");
+          load();
+        }}
       />
 
       <ConfirmDialog

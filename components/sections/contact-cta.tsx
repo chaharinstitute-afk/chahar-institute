@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Phone, Mail, MapPin, Clock, CheckCircle2, Compass, GraduationCap, FileCheck2 } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, CheckCircle2 } from "lucide-react";
 import { ContactForm } from "@/components/shared/contact-form";
 
 const contactDetails = [
@@ -9,26 +9,6 @@ const contactDetails = [
   { icon: Mail, label: "Email", value: "chaharinstitute@gmail.com" },
   { icon: MapPin, label: "Address", value: "Agra, Uttar Pradesh, India" },
   { icon: Clock, label: "Office Hours", value: "Mon – Sat, 9 AM – 6 PM" },
-];
-
-// Fills the leftover vertical space next to the taller enquiry form —
-// doubles as a quick pitch for why someone should reach out.
-const helpPoints = [
-  {
-    icon: Compass,
-    title: "New Admission Guidance",
-    desc: "Step-by-step help choosing a course, category and university that fits your goals.",
-  },
-  {
-    icon: GraduationCap,
-    title: "Career Counselling",
-    desc: "One-on-one sessions to map your background against the right degree and career path.",
-  },
-  {
-    icon: FileCheck2,
-    title: "Document & Application Support",
-    desc: "We handle verification, forms and follow-ups so nothing slows your admission down.",
-  },
 ];
 
 export function ContactCTA() {
@@ -101,38 +81,20 @@ export function ContactCTA() {
                 <p className="text-[0.75rem] text-[#9A7232]">Limited seats available</p>
               </div>
             </div>
-
-            {/* How we can help — fills remaining height, matches the form's */}
-            <div
-              className="flex-1 rounded-2xl border border-[#E5E1D8] bg-white p-6 flex flex-col justify-center gap-5"
-            >
-              {helpPoints.map(({ icon: Icon, title, desc }) => (
-                <div key={title} className="flex items-start gap-3.5">
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ background: "#E8F0ED" }}
-                  >
-                    <Icon className="size-[18px]" style={{ color: "#013220" }} />
-                  </div>
-                  <div>
-                    <p className="text-[0.85rem] font-semibold text-[#1A1A1A] mb-0.5">{title}</p>
-                    <p className="text-[0.78rem] text-[#6B7280] leading-relaxed">{desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
           </motion.div>
 
-          {/* RIGHT — form (3 cols) */}
+          {/* RIGHT — form (3 cols). self-start so it sizes to its own (now
+              shorter, without the email field) content instead of being
+              stretched to match the taller left column with empty padding. */}
           <motion.div
             initial={{ opacity: 0, x: 16 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.45 }}
-            className="lg:col-span-3 flex"
+            className="lg:col-span-3 self-start"
           >
             <div
-              className="bg-white rounded-2xl p-7 flex-1"
+              className="bg-white rounded-2xl p-7"
               style={{ boxShadow: "0 4px 32px rgba(1,50,32,0.07)" }}
             >
               <h3 className="text-[1rem] font-bold text-[#1A1A1A] mb-1">Send an Enquiry</h3>

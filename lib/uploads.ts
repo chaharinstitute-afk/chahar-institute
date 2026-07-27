@@ -25,11 +25,12 @@ const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
 export class UploadValidationError extends Error {}
 
 /**
- * Validates and saves an uploaded file to disk under a per-student subfolder.
+ * Validates and saves an uploaded file to disk under the given subfolder
+ * (relative to UPLOADS_ROOT — e.g. "students/123", "payments/45", "payment-methods").
  * Returns the relative path (relative to UPLOADS_ROOT) to store in the DB —
  * never store the absolute filesystem path.
  */
-export async function saveUploadedFile(file: File, studentId: string): Promise<string> {
+export async function saveUploadedFile(file: File, subfolder: string): Promise<string> {
   if (!ALLOWED_MIME_TYPES.has(file.type)) {
     throw new UploadValidationError(
       "Unsupported file type. Allowed: JPG, PNG, WEBP, PDF."
@@ -39,17 +40,17 @@ export async function saveUploadedFile(file: File, studentId: string): Promise<s
     throw new UploadValidationError("File is too large. Maximum size is 5MB.");
   }
 
-  const studentDir = path.join(UPLOADS_ROOT, "students", studentId);
-  await mkdir(studentDir, { recursive: true });
+  const targetDir = path.join(UPLOADS_ROOT, subfolder);
+  await mkdir(targetDir, { recursive: true });
 
   const ext = path.extname(file.name).toLowerCase() || guessExtension(file.type);
   const safeName = `${crypto.randomUUID()}${ext}`;
-  const absolutePath = path.join(studentDir, safeName);
+  const absolutePath = path.join(targetDir, safeName);
 
   const buffer = Buffer.from(await file.arrayBuffer());
   await writeFile(absolutePath, buffer);
 
-  return path.join("students", studentId, safeName);
+  return path.join(subfolder, safeName);
 }
 
 function guessExtension(mimeType: string): string {

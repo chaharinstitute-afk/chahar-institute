@@ -56,7 +56,9 @@ async function seedRolesAndPermissions() {
     PERMISSIONS.UPLOAD_DOCUMENTS,
     PERMISSIONS.SUBMIT_ADMISSION,
     PERMISSIONS.PRINT_ADMISSION_FORM,
-    // manage_leads / manage_testimonials intentionally excluded — Super Admin only.
+    PERMISSIONS.SUBMIT_PAYMENT,
+    // manage_leads / manage_testimonials / manage_payment_methods / verify_payment
+    // intentionally excluded — Super Admin only.
   ];
   const adminPerms = allPermissions.filter((p) => adminPermissionKeys.includes(p.key));
   for (const perm of adminPerms) {

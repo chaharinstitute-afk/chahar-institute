@@ -12,6 +12,10 @@ import {
   Plus,
   Megaphone,
   Star,
+  Wallet,
+  CalendarClock,
+  CreditCard,
+  Briefcase,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -29,12 +33,16 @@ const BASE_LINKS: NavItem[] = [
   { href: "/admin/admissions", label: "Admissions", icon: FileText },
   // View-only for a plain Admin (no add/edit/delete); full manage access for Super Admin.
   { href: "/admin/courses", label: "Course Names", icon: GraduationCap },
+  { href: "/admin/payments/due", label: "Due Payments", icon: CalendarClock },
+  { href: "/admin/payments", label: "Payment History", icon: Wallet, exact: true },
 ];
 
 /** Reference-data management — Super Admin only. */
 const MANAGE_LINKS: NavItem[] = [
   { href: "/admin/leads", label: "Leads", icon: Megaphone },
+  { href: "/admin/business-partners", label: "Business Partners", icon: Briefcase },
   { href: "/admin/testimonials", label: "Testimonials", icon: Star },
+  { href: "/admin/payment-methods", label: "Payment Methods", icon: CreditCard },
   { href: "/admin/masters", label: "Masters", icon: Database, linkTo: "/admin/masters/sessions" },
   { href: "/admin/users", label: "Admin Users", icon: Users },
 ];

@@ -61,6 +61,11 @@ export async function GET(
     registrationFee: admission.registrationFee ? admission.registrationFee.toString() : null,
     remarks: admission.remarks,
     createdAt: admission.createdAt,
+    totalFee: admission.totalFee ? admission.totalFee.toString() : null,
+    receivedAmount: admission.receivedAmount ? admission.receivedAmount.toString() : null,
+    dueAmount: admission.dueAmount ? admission.dueAmount.toString() : null,
+    nextPaymentDueDate: admission.nextPaymentDueDate,
+    currentPaymentStatus: admission.currentPaymentStatus,
     course: { id: admission.course.id.toString(), courseName: admission.course.courseName },
     admissionCategory: {
       id: admission.admissionCategory.id.toString(),

@@ -6,7 +6,7 @@ import { SectionTitle } from "@/components/shared/section-title";
 // Different from hero stats — focus on quality & outcomes
 const stats = [
   {
-    number: "98%",
+    number: "100%",
     label: "Admission Success Rate",
     desc: "Students successfully enrolled",
     accent: "#013220",

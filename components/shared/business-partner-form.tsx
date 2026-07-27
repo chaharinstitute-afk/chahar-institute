@@ -1,21 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-type CourseOption = { id: string; label: string };
-
-export function ContactForm({ source, defaultCourse }: { source?: string; defaultCourse?: string }) {
+export function BusinessPartnerForm() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [courseOptions, setCourseOptions] = useState<CourseOption[]>([]);
-
-  useEffect(() => {
-    fetch("/api/courses")
-      .then((res) => (res.ok ? res.json() : []))
-      .then((data: CourseOption[]) => setCourseOptions(data))
-      .catch(() => setCourseOptions([]));
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,15 +16,15 @@ export function ContactForm({ source, defaultCourse }: { source?: string; defaul
     const data = new FormData(form);
 
     try {
-      const res = await fetch("/api/enquiries", {
+      const res = await fetch("/api/business-partners", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fullName: data.get("fullName"),
-          phone: data.get("phone"),
-          interestedCourse: data.get("interestedCourse"),
+          mobile: data.get("mobile"),
+          email: data.get("email"),
+          city: data.get("city"),
           message: data.get("message"),
-          source: source ?? "contact",
         }),
       });
 
@@ -56,16 +46,17 @@ export function ContactForm({ source, defaultCourse }: { source?: string; defaul
         >
           ✓
         </div>
-        <p className="text-[1rem] font-bold text-[#013220] mb-1">Enquiry Sent!</p>
-        <p className="text-[0.82rem] text-[#6B7280]">We&apos;ll get back to you within 24 hours.</p>
+        <p className="text-[1rem] font-bold text-[#013220] mb-1">Thank you!</p>
+        <p className="text-[0.82rem] text-[#6B7280]">
+          Our team will reach out to discuss the partnership within 24 hours.
+        </p>
       </div>
     );
   }
 
   const field =
     "w-full px-4 py-3 rounded-xl border border-[#E5E1D8] bg-[#FDFBF7] text-[0.875rem] text-[#1A1A1A] placeholder:text-[#C0BBB2] focus:outline-none focus:border-[#013220] transition-colors duration-200";
-  const label =
-    "block text-[0.75rem] font-semibold text-[#4B5563] mb-1.5 tracking-wide uppercase";
+  const label = "block text-[0.75rem] font-semibold text-[#4B5563] mb-1.5 tracking-wide uppercase";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
@@ -75,40 +66,32 @@ export function ContactForm({ source, defaultCourse }: { source?: string; defaul
           <input name="fullName" type="text" required placeholder="Your name" className={field} />
         </div>
         <div>
-          <label className={label}>Phone</label>
-          <input name="phone" type="tel" required placeholder="+91 XXXXX XXXXX" className={field} />
+          <label className={label}>Mobile Number</label>
+          <input name="mobile" type="tel" required placeholder="+91 XXXXX XXXXX" className={field} />
+        </div>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label className={label}>Email (Optional)</label>
+          <input name="email" type="email" placeholder="you@example.com" className={field} />
+        </div>
+        <div>
+          <label className={label}>City</label>
+          <input name="city" type="text" placeholder="Your city" className={field} />
         </div>
       </div>
       <div>
-        <label className={label}>Interested Course</label>
-        <select
-          name="interestedCourse"
-          defaultValue={defaultCourse ?? ""}
-          className={`${field} site-select cursor-pointer appearance-none pr-9`}
-        >
-          <option value="">Select a course</option>
-          {courseOptions.map((c) => (
-            <option key={c.id} value={c.label}>
-              {c.label}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label className={label}>Message</label>
+        <label className={label}>Message (Optional)</label>
         <textarea
           name="message"
           rows={3}
-          placeholder="Any questions or details..."
+          placeholder="Tell us a bit about yourself or your network..."
           className={`${field} resize-none`}
         />
       </div>
 
-      {error && (
-        <p className="text-center text-[0.8rem] text-red-600">{error}</p>
-      )}
+      {error && <p className="text-center text-[0.8rem] text-red-600">{error}</p>}
 
-      {/* ── Submit button — same pill button used across the site ── */}
       <div className="flex justify-center pt-2">
         <button
           type="submit"
@@ -117,7 +100,7 @@ export function ContactForm({ source, defaultCourse }: { source?: string; defaul
             .filter(Boolean)
             .join(" ")}
         >
-          <span className="btn-pill-label">{loading ? "Sending…" : "Submit Enquiry"}</span>
+          <span className="btn-pill-label">{loading ? "Sending…" : "Submit"}</span>
           <span className="btn-pill-circle">
             {loading ? (
               <span className="w-3.5 h-3.5 rounded-full border-2 border-white/40 border-t-white animate-spin" />

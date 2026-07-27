@@ -101,8 +101,15 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* ── Apply Now ── */}
-          <div className="hidden md:block">
+          {/* ── Apply Now / Become a Partner ── */}
+          <div className="hidden md:flex items-center gap-2.5">
+            <Link
+              href="/business-partner"
+              className="px-4 py-2 rounded-lg text-[0.82rem] font-semibold transition-all duration-200"
+              style={{ color: "#013220", border: "1.5px solid #C5A059" }}
+            >
+              Become a Partner
+            </Link>
             <Link
               href="/contact"
               className="btn-pill btn-pill-dark"
@@ -156,7 +163,15 @@ export function Navbar() {
                       {link.label}
                     </Link>
                   ))}
-                  <div className="mt-6">
+                  <div className="mt-6 flex flex-col gap-2.5">
+                    <Link
+                      href="/business-partner"
+                      onClick={() => setOpen(false)}
+                      className="flex items-center justify-center rounded-lg px-4 py-3 text-[0.9rem] font-semibold"
+                      style={{ color: "#013220", border: "1.5px solid #C5A059" }}
+                    >
+                      Become a Partner
+                    </Link>
                     <Link
                       href="/contact"
                       onClick={() => setOpen(false)}

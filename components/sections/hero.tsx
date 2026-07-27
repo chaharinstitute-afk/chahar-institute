@@ -14,14 +14,29 @@ export function HeroSection() {
   return (
     <section
       className="relative overflow-hidden"
-      style={{
-        backgroundImage: "url(/heroBG.png)",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        minHeight: "100vh",
-      }}
+      style={{ minHeight: "100vh" }}
     >
+      {/* Mobile background — below sm only */}
+      <div
+        className="absolute inset-0 block sm:hidden"
+        style={{
+          backgroundImage: "url(/hero_mobile_bg.png)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+      {/* Desktop background — sm and up, untouched from before */}
+      <div
+        className="absolute inset-0 hidden sm:block"
+        style={{
+          backgroundImage: "url(/heroBG.png)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+
       <div className="relative max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 h-full">
         <div
           className="flex items-start"

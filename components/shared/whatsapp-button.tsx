@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 
 export function WhatsAppButton() {
-  const phone = "919917281887"; // country code + number
+  const phone = "916397981188"; // country code + number
   const message = encodeURIComponent("Hi, I'm interested in admission at Chahar Institute. Please guide me.");
   const url = `https://wa.me/${phone}?text=${message}`;
 

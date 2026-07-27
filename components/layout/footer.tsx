@@ -2,11 +2,12 @@ import Link from "next/link";
 import { getPublicCourses } from "@/lib/public-courses";
 
 const quickLinks = [
-  { href: "/courses",      label: "Courses"       },
-  { href: "/universities", label: "Universities"  },
-  { href: "/about",        label: "About Us"      },
-  { href: "/blog",         label: "Blog"          },
-  { href: "/contact",      label: "Contact"       },
+  { href: "/courses",          label: "Courses"                },
+  { href: "/universities",     label: "Universities"           },
+  { href: "/about",            label: "About Us"               },
+  { href: "/blog",             label: "Blog"                   },
+  { href: "/contact",          label: "Contact"                },
+  { href: "/business-partner", label: "Become a Business Partner" },
 ];
 
 export async function Footer() {

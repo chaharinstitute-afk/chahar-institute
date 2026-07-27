@@ -65,6 +65,8 @@ model User {
   createdAdmissions Admission[]    @relation("AdmissionCreatedBy")
   admissionLogs     AdmissionLog[]
   notifications     Notification[]
+  submittedPayments PaymentSubmission[] @relation("PaymentSubmittedBy")
+  verifiedPayments  PaymentSubmission[] @relation("PaymentVerifiedBy")
 
   @@map("users")
 }
@@ -373,6 +375,15 @@ model Admission {
   createdAt           DateTime        @default(now()) @map("created_at")
   updatedAt           DateTime        @updatedAt @map("updated_at")
 
+  // Manual Payment Management — running balance, kept on the admission for
+  // fast Due Payments listing without recomputing from submission history.
+  totalFee             Decimal?                @map("total_fee") @db.Decimal(10, 2)
+  receivedAmount       Decimal?                @map("received_amount") @db.Decimal(10, 2)
+  dueAmount            Decimal?                @map("due_amount") @db.Decimal(10, 2)
+  nextPaymentDueDate   DateTime?               @map("next_payment_due_date") @db.Date
+  lastPaymentDate      DateTime?               @map("last_payment_date")
+  currentPaymentStatus AdmissionPaymentStatus? @map("current_payment_status")
+
   student           Student           @relation(fields: [studentId], references: [id])
   university        University?       @relation(fields: [universityId], references: [id])
   admissionCategory AdmissionCategory @relation(fields: [admissionCategoryId], references: [id])
@@ -382,9 +393,10 @@ model Admission {
   stream            Stream?           @relation(fields: [streamId], references: [id])
   creator           User?             @relation("AdmissionCreatedBy", fields: [createdBy], references: [id])
 
-  documents StudentDocument[]
-  payments  Payment[]
-  logs      AdmissionLog[]
+  documents          StudentDocument[]
+  payments           Payment[]
+  paymentSubmissions PaymentSubmission[]
+  logs               AdmissionLog[]
 
   @@map("admissions")
 }
@@ -418,6 +430,90 @@ model Payment {
   admission Admission @relation(fields: [admissionId], references: [id], onDelete: Cascade)
 
   @@map("payments")
+}
+
+// ─────────────────────────────────────────────
+// Manual Payment Management
+// See .kiro/specs/manual-payment-management/design.md for full design notes.
+// ─────────────────────────────────────────────
+
+enum PaymentMethodType {
+  upi
+  bank_transfer
+}
+
+enum PaymentSubmissionStatus {
+  pending_verification
+  approved
+  rejected
+}
+
+enum AdmissionPaymentStatus {
+  pending_verification
+  partially_paid
+  paid
+  rejected
+}
+
+/** QR/UPI (or bank) payment options configured by the Super Admin, shown to Admins in the Pay popup. */
+model PaymentMethod {
+  id            BigInt            @id @default(autoincrement())
+  type          PaymentMethodType @default(upi)
+  label         String            @db.VarChar(100)
+  upiId         String?           @map("upi_id") @db.VarChar(100)
+  upiNumber     String?           @map("upi_number") @db.VarChar(20)
+  qrCodeImage   String?           @map("qr_code_image") @db.VarChar(255)
+  bankName      String?           @map("bank_name") @db.VarChar(150)
+  accountNumber String?           @map("account_number") @db.VarChar(50)
+  ifscCode      String?           @map("ifsc_code") @db.VarChar(20)
+  isActive      Boolean           @default(true) @map("is_active")
+  sortOrder     Int               @default(0) @map("sort_order")
+  createdAt     DateTime          @default(now()) @map("created_at")
+  updatedAt     DateTime          @updatedAt @map("updated_at")
+
+  submissions PaymentSubmission[]
+
+  @@map("payment_methods")
+}
+
+/**
+ * One payment-proof submission from an Admin against an admission, and its
+ * verification outcome from a Super Admin. This is the "Payment History" row
+ * from the BRD — kept separate from the older `Payment` model above, which
+ * backs a different, already-in-use concept (registration fee at admission
+ * creation) and doesn't carry a screenshot/UTR/verifier/4-state status.
+ */
+model PaymentSubmission {
+  id              BigInt                   @id @default(autoincrement())
+  admissionId     BigInt                   @map("admission_id")
+  paymentMethodId BigInt?                  @map("payment_method_id")
+
+  // Filled by Admin at submission time
+  amountPaid     Decimal  @map("amount_paid") @db.Decimal(10, 2)
+  utrNumber      String?  @map("utr_number") @db.VarChar(100)
+  screenshotPath String   @map("screenshot_path") @db.VarChar(255)
+  submittedBy    BigInt   @map("submitted_by")
+  submittedAt    DateTime @default(now()) @map("submitted_at")
+
+  // Filled by Super Admin at verification time
+  status     PaymentSubmissionStatus @default(pending_verification)
+  verifiedBy BigInt?                 @map("verified_by")
+  verifiedAt DateTime?               @map("verified_at")
+  remarks    String?                 @db.Text
+
+  // Snapshot of the admission's running balance at the moment this submission
+  // was decided — the audit trail for the Payment History table.
+  totalFeeAtDecision       Decimal?  @map("total_fee_at_decision") @db.Decimal(10, 2)
+  receivedAmountAtDecision Decimal?  @map("received_amount_at_decision") @db.Decimal(10, 2)
+  dueAmountAtDecision      Decimal?  @map("due_amount_at_decision") @db.Decimal(10, 2)
+  nextDueDateSet           DateTime? @map("next_due_date_set") @db.Date
+
+  admission     Admission      @relation(fields: [admissionId], references: [id], onDelete: Cascade)
+  paymentMethod PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
+  submitter     User           @relation("PaymentSubmittedBy", fields: [submittedBy], references: [id])
+  verifier      User?          @relation("PaymentVerifiedBy", fields: [verifiedBy], references: [id])
+
+  @@map("payment_submissions")
 }
 
 // ─────────────────────────────────────────────
@@ -505,6 +601,27 @@ model Testimonial {
   updatedAt DateTime          @updatedAt @map("updated_at")
 
   @@map("testimonials")
+}
+
+/**
+ * Submissions from the public "Become a Business Partner" button/page.
+ * Kept as its own model (not mixed into Lead) since it's a different funnel —
+ * people interested in partnering/referring students, not applying themselves.
+ * Reviewed by the Super Admin only, under Business Partners.
+ */
+model BusinessPartnerLead {
+  id        BigInt     @id @default(autoincrement())
+  fullName  String     @map("full_name") @db.VarChar(150)
+  mobile    String     @db.VarChar(20)
+  email     String?    @db.VarChar(150)
+  city      String?    @db.VarChar(100)
+  message   String?    @db.Text
+  status    LeadStatus @default(new)
+  remarks   String?    @db.Text
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  @@map("business_partner_leads")
 }
 
 /** Submissions from the public "Send an Enquiry" form. Reviewed by the Super Admin under Leads. */

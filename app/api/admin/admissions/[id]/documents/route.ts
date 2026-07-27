@@ -46,7 +46,7 @@ export async function POST(
   }
 
   try {
-    const relativePath = await saveUploadedFile(file, admission.studentId.toString());
+    const relativePath = await saveUploadedFile(file, `students/${admission.studentId.toString()}`);
 
     const document = await prisma.studentDocument.create({
       data: {
