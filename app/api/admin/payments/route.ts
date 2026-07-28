@@ -8,7 +8,8 @@ import { paymentSubmissionInclude, serializeSubmission } from "@/lib/payments";
  * GET /api/admin/payments
  * Global Payment History — both roles can view, scoped like Admissions
  * (Admin sees only submissions against admissions they created).
- * Filters: q (student name / admission no), status, from, to (submittedAt range).
+ * Filters: q (student name / admission no), status, from, to (submittedAt range),
+ * submittedBy (Super Admin only — filter by which admin recorded the payment).
  */
 export async function GET(req: NextRequest) {
   const session = await auth();
@@ -21,9 +22,14 @@ export async function GET(req: NextRequest) {
   const status = req.nextUrl.searchParams.get("status");
   const from = req.nextUrl.searchParams.get("from");
   const to = req.nextUrl.searchParams.get("to");
+  const submittedByParam = req.nextUrl.searchParams.get("submittedBy");
 
   const where: Record<string, unknown> = {};
-  if (!canViewAll) where.admission = { createdBy: BigInt(session.user.id) };
+  if (!canViewAll) {
+    where.admission = { createdBy: BigInt(session.user.id) };
+  } else if (submittedByParam) {
+    where.submittedBy = BigInt(submittedByParam);
+  }
   if (status) where.status = status;
   if (q) {
     where.OR = [
