@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     template: "%s | Chahar Institute",
   },
   description:
-    "Chahar Institute offers expert guidance for admissions to B.Ed, D.El.Ed, MBA, BCA, MCA and other courses through UGC-recognised universities.",
+    "Chahar Institute guides admissions to Regular courses (B.Ed, D.El.Ed, M.Ed) and 15+ Distance & Online courses (BA, BCA, MBA, MCA) through UGC-recognised universities.",
  keywords: [
   // Brand
   "Chahar Institute",

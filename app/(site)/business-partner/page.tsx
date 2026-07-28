@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Handshake, TrendingUp, Users } from "lucide-react";
+import { Handshake, LayoutDashboard, TrendingUp, Users } from "lucide-react";
 import { PageBanner } from "@/components/shared/page-banner";
 import { BusinessPartnerForm } from "@/components/shared/business-partner-form";
 
@@ -31,6 +31,11 @@ const benefits = [
     icon: Users,
     title: "Full Support",
     description: "Our counselling team handles the admission process end-to-end for your referrals.",
+  },
+  {
+    icon: LayoutDashboard,
+    title: "Dedicated Partner Panel",
+    description: "Once onboarded, Access your own dashboard to add students, track admission status, monitor commissions, manage all your referrals and earning  from one place.",
   },
 ];
 

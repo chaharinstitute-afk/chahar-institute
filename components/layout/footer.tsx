@@ -3,7 +3,6 @@ import { getPublicCourses } from "@/lib/public-courses";
 
 const quickLinks = [
   { href: "/courses",          label: "Courses"                },
-  { href: "/universities",     label: "Universities"           },
   { href: "/about",            label: "About Us"               },
   { href: "/blog",             label: "Blog"                   },
   { href: "/contact",          label: "Contact"                },
@@ -55,7 +54,7 @@ export async function Footer() {
             {/* Contact highlight */}
             <div className="mt-5 space-y-2">
               <a
-                href="tel:+919050623550"
+                href="tel:+919917281887"
                 className="flex items-center gap-2 text-[0.82rem] font-semibold hover:text-white transition-colors"
                 style={{ color: "#C5A059" }}
               >
