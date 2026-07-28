@@ -189,20 +189,24 @@ export async function Footer() {
                 background: "rgba(197,160,89,0.06)",
               }}
             >
-              <span
-                className="text-[0.7rem] transition-transform duration-500 group-hover:rotate-180"
-                style={{ color: "#C5A059" }}
-              >
-                ✦
-              </span>
               <span style={{ color: "rgba(255,255,255,0.45)", fontSize: "0.76rem" }}>
-                Crafted by{" "}
-                <span
-                  className="font-semibold transition-colors"
-                  style={{ color: "#C5A059" }}
-                >
-                  Arun Dev Studio
-                </span>
+                Design and developed with
+              </span>
+              <span className="animate-pulse" style={{ color: "#e0507a", fontSize: "0.8rem" }}>
+                ❤
+              </span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/arun_dev_stuido_logo.webp"
+                alt="Arun Dev Studio"
+                className="transition-transform duration-500 group-hover:rotate-[8deg]"
+                style={{ height: "16px", width: "auto", objectFit: "contain" }}
+              />
+              <span
+                className="font-semibold transition-colors"
+                style={{ color: "#C5A059", fontSize: "0.76rem" }}
+              >
+                Arun Dev Studio
               </span>
             </a>
           </div>

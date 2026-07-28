@@ -60,6 +60,27 @@ export function SidebarContent({
         </div>
         <LogoutButton />
       </div>
+
+      {/* Developer credit — same badge used in the public site footer. */}
+      <a
+        href="https://arundevstudio.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group flex flex-wrap items-center justify-center gap-1.5 border-t border-[#E5E1D8] px-3 py-2.5 transition-colors hover:bg-[#FDFBF7]"
+      >
+        <span className="text-[0.68rem] text-[#9CA3AF]">Design and developed with</span>
+        <span className="animate-pulse text-[0.75rem]" style={{ color: "#e0507a" }}>
+          ❤
+        </span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/arun_dev_stuido_logo.webp"
+          alt="Arun Dev Studio"
+          className="h-3 w-auto object-contain transition-transform duration-500 group-hover:rotate-[8deg]"
+          style={{ filter: "brightness(0)" }}
+        />
+        <span className="text-[0.68rem] font-semibold text-[#8a6d31]">Arun Dev Studio</span>
+      </a>
     </>
   );
 }

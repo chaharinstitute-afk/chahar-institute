@@ -95,10 +95,17 @@ export function HeroSection() {
               </Link>
             </div>
 
-            {/* Stats — compact inline row */}
+            {/* Stats — set on a soft translucent panel so they stay readable
+                regardless of what's behind them in the background image. */}
             <div
-              className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-5 pt-7"
-              style={{ borderTop: "1px solid rgba(1,50,32,0.18)" }}
+              className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-5 px-5 py-5 rounded-2xl sm:px-7"
+              style={{
+                background: "rgba(253,251,247,0.72)",
+                backdropFilter: "blur(6px)",
+                WebkitBackdropFilter: "blur(6px)",
+                border: "1px solid rgba(1,50,32,0.1)",
+                boxShadow: "0 8px 24px rgba(1,50,32,0.08)",
+              }}
             >
               {stats.map((s) => (
                 <div key={s.label} className="flex flex-col gap-0.5">
@@ -108,14 +115,13 @@ export function HeroSection() {
                       fontSize: "1.5rem",
                       color: "#C5A059",
                       lineHeight: 1.1,
-                      textShadow: "0 1px 6px rgba(255,255,255,0.5)",
                     }}
                   >
                     {s.number}
                   </span>
                   <span
                     className="text-[0.72rem] font-medium uppercase tracking-[0.1em]"
-                    style={{ color: "#013220", textShadow: "0 1px 4px rgba(255,255,255,0.5)" }}
+                    style={{ color: "#013220" }}
                   >
                     {s.label}
                   </span>
