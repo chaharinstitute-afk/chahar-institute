@@ -7,7 +7,7 @@ const stats = [
   { number: "10+",   label: "Years of Trust"    },
   { number: "5000+", label: "Students Placed"   },
   { number: "15+",   label: "Universities"      },
-  { number: "20+",   label: "Courses Available" },
+  { number: "50+",   label: "Courses Available" },
 ];
 
 export function HeroSection() {
@@ -78,9 +78,7 @@ export function HeroSection() {
               className="mb-10 max-w-[400px]"
               style={{ color: "#6B7280", fontSize: "0.975rem", lineHeight: 1.75 }}
             >
-              Agra&apos;s trusted admission partner for Regular courses like
-              B.Ed and D.El.Ed, plus 15+ Distance &amp; Online courses —
-              BA, BCA, MBA, MCA and more — through UGC‑recognised universities.
+             Your trusted admission partner across India for Regular, Distance & Online education. Chahar Institute helps students enroll in B.Ed, D.El.Ed, BA, BCA, MBA, MCA and 50+ programs through UGC-recognised universities.
             </p>
 
             {/* Buttons */}

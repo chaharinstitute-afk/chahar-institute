@@ -46,7 +46,7 @@ export function AboutSection() {
           >
             <SectionTitle
               title="About Chahar Institute"
-              subtitle="Your trusted partner in education since 2014."
+              subtitle="Your trusted partner in education since 2016."
               align="left"
             />
             <p className="text-[#6B7280] text-[0.95rem] leading-relaxed mb-5">

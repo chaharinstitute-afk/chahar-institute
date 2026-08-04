@@ -11,17 +11,21 @@ import { FAQSection } from "@/components/sections/faq-section";
 import { ContactCTA } from "@/components/sections/contact-cta";
 
 export const metadata: Metadata = {
-  title: "Chahar Institute — UP B.Ed & D.El.Ed College | Distance Courses, Agra",
+  title:
+    "Regular & Distance Course Admissions in India | Chahar Institute",
   description:
-    "Chahar Institute, Agra offers expert guidance for admissions to UP B.Ed college, D.El.Ed college, MBA, BCA, MCA and other distance courses through UGC-recognised universities.",
-  alternates: { canonical: "/" },
+    "Chahar Institute provides expert admission guidance for Regular, Distance, Online & ODL courses across India, including B.Ed, D.El.Ed, M.Ed, BCA, MCA, MBA, BA, B.Com, B.Sc, MA, M.Com and other UGC-recognised university programs.",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "Chahar Institute — UP B.Ed & D.El.Ed College, Agra",
-    description: "Your trusted partner for B.Ed, D.El.Ed and distance course admissions in Agra, Uttar Pradesh.",
+    title:
+      "Chahar Institute | Regular & Distance Course Admissions Across India",
+    description:
+      "Get expert guidance for admissions to Regular, Distance, Online & ODL programs from UGC-recognised universities across India. Chahar Institute is based in Agra and helps students choose the right course and university.",
     url: "/",
   },
 };
-
 export default function Home() {
   return (
     <>
